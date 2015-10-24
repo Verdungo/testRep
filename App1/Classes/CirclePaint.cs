@@ -19,7 +19,7 @@ namespace App1.Classes
 
         public int CircleRadius { get; set; }
 
-        public bool Touched { get; set; }
+        public int Touched { get; set; }
 
         public Point Delta { get; set; }
 
@@ -37,6 +37,7 @@ namespace App1.Classes
             CircleCenter = center;
             CircleRadius = radius;
             Color = color;
+            Touched = -1;
         }
 
         public void Draw(Canvas canvas)
@@ -48,11 +49,7 @@ namespace App1.Classes
         {
             bool res;
 
-            // TODO: проверить касание в круг
             if (Math.Pow(Convert.ToDouble(CircleCenter.X - touch.X), 2) + Math.Pow(Convert.ToDouble(CircleCenter.Y - touch.Y), 2) < Math.Pow(CircleRadius, 2))
-            /*if (Center.X - Radius < touch.X && touch.X > Center.X + Radius &&
-                    Center.Y - Radius < touch.Y && touch.Y > Center.Y + Radius)*/
-                    // ^^ тут было касание в квадрат, если что
             {
                 Delta = new Point(touch.X - CircleCenter.X, touch.Y - CircleCenter.Y);
                 res = true;
@@ -64,12 +61,16 @@ namespace App1.Classes
             return res;
         }
 
-        public void CheckTouched(Point touchPlace)
+        public bool CheckTouched(Point touchPlace)
         {
             if (Math.Pow(Convert.ToDouble(CircleCenter.X - touchPlace.X), 2) + Math.Pow(Convert.ToDouble(CircleCenter.Y - touchPlace.Y), 2) < Math.Pow(CircleRadius, 2))
             {
-                Touched = true;
                 Delta = new Point(touchPlace.X - CircleCenter.X, touchPlace.Y - CircleCenter.Y);
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 

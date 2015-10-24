@@ -16,16 +16,15 @@ namespace App1.Classes
     public class DrawingView : View
     {
         private List<CirclePaint> _touches;
-        private TextView _tv;
 
         public DrawingView(Context context) : base(context)
         {
             //DEBUG: создали несколько объектов
             _touches = new List<CirclePaint>()
             {
-                new CirclePaint(new Point(100, 100), 100, Color.Red),
-                new CirclePaint(new Point(100, 300), 100, Color.Yellow),
-                new CirclePaint(new Point(100, 500), 100, Color.Green)
+                new CirclePaint(new Point(400, 500), 200, Color.Red),
+                new CirclePaint(new Point(800, 500), 200, Color.Yellow),
+                new CirclePaint(new Point(1200, 500), 200, Color.Green)
             };
         }
 
@@ -39,40 +38,55 @@ namespace App1.Classes
 
         public override bool OnTouchEvent(MotionEvent e)
         {
-            //TextView tv = FindViewById<TextView>(Resource.Id.textView1);
-            Point TouchPlace = new Point((int)e.GetX(), (int)e.GetY());
+            int touchesCount = e.PointerCount;
+            List<Point> TouchPlace = new List<Point>();
 
-            switch (e.Action & MotionEventActions.Mask)
+            for (int i = 0; i < touchesCount; i++)
             {
+                TouchPlace.Add(new Point((int)e.GetX(i), (int)e.GetY(i)));
+            }
+
+            switch (e.ActionMasked)
+            {
+                case MotionEventActions.PointerDown:
                 case MotionEventActions.Down:
-                    foreach (var item in _touches)
+                    foreach (Point touch in TouchPlace)
                     {
-                        item.CheckTouched(TouchPlace);
+                        foreach (CirclePaint circle in _touches)
+                        {
+                            if (circle.IsTouched(touch))
+                            {
+                                circle.Touched = TouchPlace.IndexOf(touch);
+                            }
+                        }
                     }
                     break;
                 case MotionEventActions.Move:
-                    foreach (var item in _touches)
+                    foreach (CirclePaint circle in _touches)
                     {
-                        if (item.Touched)
+                        if (circle.Touched >= 0)
                         {
-                            item.MoveTo(TouchPlace);
+                            circle.MoveTo(TouchPlace[e.FindPointerIndex(circle.Touched)]);
                             Invalidate();
                         }
                     }
                     break;
+                case MotionEventActions.PointerUp:
                 case MotionEventActions.Up:
-                    foreach (var item in _touches)
+                case MotionEventActions.Cancel:
+                    foreach (CirclePaint circle in _touches)
                     {
-                        if (item.Touched)
+                        if (circle.Touched == e.GetPointerId(e.ActionIndex))
                         {
-                            item.MoveTo(TouchPlace);
-                            item.Touched = false;
+                            circle.Touched = -1;
                         }
+
                     }
                     break;
                 default:
                     break;
             }
+
             return true;
         }
     }

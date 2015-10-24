@@ -17,11 +17,11 @@ namespace App1
             base.OnCreate(bundle);
 
             // Set our view from the "main" layout resource
-            //SetContentView(new DrawingView(this));
-            SetContentView(Resource.Layout.Main);
+            SetContentView(new DrawingView(this));
+            //SetContentView(Resource.Layout.Main);
 
-            LinearLayout MainLayout = FindViewById<LinearLayout>(Resource.Id.MainLayout);
-            MainLayout.AddView(new DrawingView(this));
+            //LinearLayout MainLayout = FindViewById<LinearLayout>(Resource.Id.MainLayout);
+            //MainLayout.AddView(new DrawingView(this));
 
         }       
     }
