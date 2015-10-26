@@ -22,9 +22,9 @@ namespace App1.Classes
             //DEBUG: создали несколько объектов
             _touches = new List<CirclePaint>()
             {
-                new CirclePaint(new Point(400, 500), 200, Color.Red),
-                new CirclePaint(new Point(800, 500), 200, Color.Yellow),
-                new CirclePaint(new Point(1200, 500), 200, Color.Green)
+                new CirclePaint(new Point(360, 200), 75, Color.Red),
+                new CirclePaint(new Point(360, 500), 75, Color.Yellow),
+                new CirclePaint(new Point(360, 800), 75, Color.Green)
             };
         }
 
